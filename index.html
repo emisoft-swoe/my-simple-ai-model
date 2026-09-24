@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My simple AI model</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 20px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        body {
+            width: 90vw;
+            background: black;
+            color: white;
+        }
+        textarea {
+            min-height: 50px;
+            max-height: 200px;
+            width: 80%;
+            height: 50px;
+            min-width: 100%;
+            max-width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border-width: 2px;
+            font-size: large;
+            background: black;
+            color: white;
+        }
+        button {
+            padding: 10px;
+            border-radius: 10px;
+            border-width: 0;
+            background: blue;
+            color: white;
+            transition: background 0.5s ease;
+            cursor: pointer;
+        }
+        .p {
+            padding: 15px;
+            border-radius: 10px;
+            border-width: 2px;
+            color: white;
+            height: 300px;
+            min-height: 300px;
+            max-height: 300px;
+            background: rgba(128, 128, 128, 0.53);
+        }
+        .good {background: green}
+        .bad {background: red;}
+        button:hover {background: rgba(0, 0, 255, 0.707)}
+    </style>
+</head>
+<body>
+    <h1>My simple AI model</h1>
+    <textarea id="text" placeholder="Enter a text"></textarea>
+    <button id="send">Send</button>
+    <button id="clear">Clear log</button>
+    <textarea id="info" class="p" disabled></textarea>
+    <script>
+        const text = document.getElementById('text'),
+            send = document.getElementById('send'),
+            info = document.getElementById('info'),
+            clear = document.getElementById('clear')
+
+        clearLog()
+        clear.addEventListener('click', clearLog)
+        send.addEventListener('click', async ()=>sendMessage(text.value))
+        text.addEventListener('keyup', e=>{if (e.shiftKey && e.key=='Enter') sendMessage(`${text.value}`.substring(0, `${text.value}`.length-1))})
+        async function sendMessage(message) {
+            if (message && message != '') try {
+                (await fetch(`http://localhost:80/${encodeURI(message)}`)).json().then(async value=>{
+                    log(value)
+                    text.value=''
+                })
+            } catch (err) {log(err, true)}
+            else log('Cannot send an empty message!', true)
+        }
+        function clearLog() {info.textContent='Log\n'}
+        function log(message, iserror=false) {
+            info.scrollBy({top: info.scrollHeight, behavior: 'smooth'})
+            info.textContent+=`\n\n${iserror?'Error':`Incoming message`}(${new Date().toUTCString()}): ${message}`
+        }
+    </script>
+</body>
+</html>
