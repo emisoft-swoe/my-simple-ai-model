@@ -138,5 +138,10 @@ http.createServer((req, res)=>{
     var message = decodeURI(`${req.url}`.substring(1))
     res.setHeader('Access-Control-Allow-Origin', '*')
     res.writeHead(200, {'content-type':'text/html'})
-    res.end(JSON.stringify(generateResponse(message)))
+    if (message.startWith('message/'))
+        res.end(JSON.stringify(generateResponse(message)))
+    else fs.readFile('./index.html', {encoding:'utf-8'}, (err, data)=>{
+        if (!err) res.end(data)
+        else res.end('Page not found!')
+    });
 }).listen(80)
