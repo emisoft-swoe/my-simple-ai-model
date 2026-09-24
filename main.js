@@ -133,16 +133,15 @@ function getDatas(type) {
 http.createServer((req, res)=>{
     var message = decodeURI(`${req.url}`.substring(1))
     res.setHeader('Access-Control-Allow-Origin', '*')
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE')
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type')
     if (message.startsWith('message/')) {
+        res.writeHead(200, {'content-type':'application/json'})
         res.end(JSON.stringify(generateResponse(message.substring(8))))
-        res.writeHead(200, {'Content-Type':'application/json'})
     } else {
-        res.writeHead(200, {'Content-Type':'text/html'})
+        res.writeHead(200, {'content-type':'text/html'})
         fs.readFile('./index.html', {encoding:'utf-8'}, (err, data)=>{
             if (!err) res.end(data)
             else res.end('Page not found!')
-        });
-    }
-}).listen(process.env.PORT)
+        });}
+}).listen(80)
