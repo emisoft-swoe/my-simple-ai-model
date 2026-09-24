@@ -71,7 +71,7 @@
         text.addEventListener('keyup', e=>{if (e.shiftKey && e.key=='Enter') sendMessage(`${text.value}`.substring(0, `${text.value}`.length-1))})
         async function sendMessage(message) {
             if (message && message != '') try {
-                (await fetch(`https://my-simple-ai.onrender.com/message/${encodeURI(message)}`)).json().then(async value=>{
+                (await fetch(`https://my-simple-ai-model.onrender.com/message/${encodeURI(message)}`)).json().then(async value=>{
                     log(value)
                     text.value=''
                 })
