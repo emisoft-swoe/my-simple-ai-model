@@ -1,8 +1,4 @@
-import fs from 'fs'
-import http from 'http'
-import say from 'say'
-
-const path = './my_simple_ai_model/memory.json'
+const path = './my_simple_ai_model/memory.json', http = require('http'), fs = require('fs')
 
 var memory = {
     bank: [{
@@ -139,7 +135,7 @@ http.createServer((req, res)=>{
     res.setHeader('Access-Control-Allow-Origin', '*')
     res.writeHead(200, {'content-type':'text/html'})
     if (message.startWith('message/'))
-        res.end(JSON.stringify(generateResponse(message)))
+        res.end(JSON.stringify(generateResponse(message.substring(8))))
     else fs.readFile('./index.html', {encoding:'utf-8'}, (err, data)=>{
         if (!err) res.end(data)
         else res.end('Page not found!')
