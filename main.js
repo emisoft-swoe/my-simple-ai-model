@@ -1,4 +1,4 @@
-const path = './my_simple_ai_model/memory.json', http = require('http'), fs = require('fs')
+const path = './memory.json', http = require('http'), fs = require('fs')
 
 var memory = {
     bank: [{
