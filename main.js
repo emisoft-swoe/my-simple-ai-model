@@ -134,7 +134,7 @@ http.createServer((req, res)=>{
     var message = decodeURI(`${req.url}`.substring(1))
     res.setHeader('Access-Control-Allow-Origin', '*')
     res.writeHead(200, {'content-type':'text/html'})
-    if (message.startWith('message/'))
+    if (message.startsWith('message/'))
         res.end(JSON.stringify(generateResponse(message.substring(8))))
     else fs.readFile('./index.html', {encoding:'utf-8'}, (err, data)=>{
         if (!err) res.end(data)
